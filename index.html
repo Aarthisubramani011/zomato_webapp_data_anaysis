@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Our Menu</h2>
+<div class="grid grid-3">
+  {% for item in items %}
+  <div class="card">
+    <h3>{{ item.name }}</h3>
+    <p class="text-right"><strong>₹{{ "%.2f"|format(item.price) }}</strong></p>
+    <p><em>{{ item.category }}</em></p>
+    {% if item.description %}
+      <p style="margin: 0.5rem 0; color: #666;">{{ item.description }}</p>
+    {% endif %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap;">
+      {% if item.rating %}
+        <span style="margin-right: 1rem;">⭐ {{ item.rating }}/5</span>
+      {% endif %}
+      {% if item.preparation_time %}
+        <span>🕐 {{ item.preparation_time }} min</span>
+      {% endif %}
+    </div>
+    <form method="POST" action="/add_to_cart" style="margin-top: 1rem;">
+      <input type="hidden" name="item_id" value="{{ item.id }}">
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <input type="number" name="quantity" value="1" min="1" max="10" style="width: 80px;">
+        <button type="submit" class="btn btn-sm">Add to Cart</button>
+      </div>
+    </form>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

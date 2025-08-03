@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Order History - Foodie Express{% endblock %}
+
+{% block content %}
+<h2>Order History</h2>
+{% if orders %}
+  {% for order in orders %}
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem; flex-wrap: wrap;">
+        <div>
+          <h3 style="color: #d32f2f;">Order #{{ order.id }}</h3>
+          <p style="color: #666; margin: 0.25rem 0;">{{ order.order_time.strftime('%B %d, %Y at %I:%M %p') }}</p>
+        </div>
+        <div style="text-align: right;">
+          <p style="font-size: 1.2rem; margin-bottom: 0.5rem;"><strong>₹{{ "%.2f"|format(order.total_amount) }}</strong></p>
+          <span class="btn btn-sm" style="background: 
+            {% if order.order_status == 'Delivered' %}#28a745
+            {% elif order.order_status == 'Cancelled' %}#dc3545
+            {% elif order.order_status == 'Confirmed' %}#007bff
+            {% elif order.order_status == 'Preparing' %}#fd7e14
+            {% elif order.order_status == 'Out for Delivery' %}#6f42c1
+            {% else %}#ffc107{% endif %}; font-size: 0.8rem;">
+            {{ order.order_status }}
+          </span>
+        </div>
+      </div>
+      {% if order.delivery_address %}
+        <p style="margin-bottom: 0.5rem;"><strong>📍 Delivery to:</strong> 
+          {{ order.delivery_address[:80] }}{% if order.delivery_address|length > 80 %}...{% endif %}
+        </p>
+      {% endif %}
+      {% if order.payment_method %}
+        <p style="margin-bottom: 1rem;"><strong>💳 Payment:</strong> {{ order.payment_method }} 
+          <span style="color: {% if order.payment_status == 'Completed' %}#28a745{% else %}#dc3545{% endif %};">
+            ({{ order.payment_status }})
+          </span>
+        </p>
+      {% endif %}
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="/order/{{ order.id }}" class="btn btn-sm">View Details</a>
+        {% if order.order_status == 'Delivered' %}
+          <a href="/reorder/{{ order.id }}" class="btn btn-secondary btn-sm">Reorder</a>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="card text-center">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
+    <h3>No orders yet!</h3>
+    <p style="margin: 1rem 0;">Start ordering some delicious food to see your order history.</p>
+    <a href="/" class="btn">Browse Menu</a>
+  </div>
+{% endif %}
+{% endblock %}

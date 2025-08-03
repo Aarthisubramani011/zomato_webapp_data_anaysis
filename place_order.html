@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Place Order - Foodie Express{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+  <div class="card">
+    <h2 class="text-center mb-2">Order Details</h2>
+    <form method="POST">
+      <div class="form-group">
+        <label for="delivery_address">Delivery Address *</label>
+        <textarea name="delivery_address" id="delivery_address" rows="4" required 
+                  placeholder="Enter your complete delivery address including house number, street, area, city, and pincode..."></textarea>
+      </div>
+      <div class="form-group">
+        <label for="special_instructions">Special Instructions</label>
+        <textarea name="special_instructions" id="special_instructions" rows="3" 
+                  placeholder="Any special requests or instructions for your order (e.g., extra spicy, no onions, etc.)..."></textarea>
+      </div>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/cart" class="btn btn-secondary">Back to Cart</a>
+        <button type="submit" class="btn">Continue to Payment</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

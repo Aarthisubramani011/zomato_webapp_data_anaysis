@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmed - Foodie Express{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto;">
+  <div class="card text-center">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">✅</div>
+    <h2 style="color: #28a745; margin-bottom: 1rem;">Order Confirmed!</h2>
+    <p style="margin-bottom: 1rem; font-size: 1.1rem;">Thank you for your order. Your delicious food is being prepared!</p>
+    <div style="background: #d4edda; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border: 1px solid #c3e6cb;">
+      <p><strong>Order ID:</strong> #{{ order_id }}</p>
+      {% if transaction_id %}
+        <p><strong>Transaction ID:</strong> {{ transaction_id }}</p>
+      {% endif %}
+      <p style="color: #155724; margin-top: 0.5rem;"><strong>Status:</strong> Order Confirmed</p>
+    </div>
+    <div style="background: #fff3cd; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border: 1px solid #ffeaa7;">
+      <p style="color: #856404;">📱 You will receive SMS updates about your order status</p>
+      <p style="color: #856404;">🕐 Estimated delivery time: 30-45 minutes</p>
+    </div>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <a href="/" class="btn">Continue Shopping</a>
+      <a href="/orders" class="btn btn-secondary">View My Orders</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

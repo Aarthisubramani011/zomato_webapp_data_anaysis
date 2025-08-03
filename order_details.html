@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Order Details - Foodie Express{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem; flex-wrap: wrap;">
+      <div>
+        <h2 style="color: #d32f2f;">Order #{{ order.id }}</h2>
+        <p style="color: #666; margin: 0.5rem 0;">Placed on {{ order.order_time.strftime('%B %d, %Y at %I:%M %p') }}</p>
+      </div>
+      <span class="btn" style="background: 
+        {% if order.order_status == 'Delivered' %}#28a745
+        {% elif order.order_status == 'Cancelled' %}#dc3545
+        {% elif order.order_status == 'Confirmed' %}#007bff
+        {% elif order.order_status == 'Preparing' %}#fd7e14
+        {% elif order.order_status == 'Out for Delivery' %}#6f42c1
+        {% else %}#ffc107{% endif %};">
+        {{ order.order_status }}
+      </span>
+    </div>
+
+    <div class="grid grid-2">
+      <div>
+        <h3 style="margin-bottom: 1rem; color: #d32f2f;">Order Items</h3>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; margin-top: 1rem; min-width: 400px;">
+            <thead>
+              <tr style="border-bottom: 2px solid #ddd; background: #f8f9fa;">
+                <th style="text-align: left; padding: 0.75rem;">Item</th>
+                <th style="text-align: center; padding: 0.75rem;">Qty</th>
+                <th style="text-align: right; padding: 0.75rem;">Price</th>
+                <th style="text-align: right; padding: 0.75rem;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in items %}
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 0.75rem;">
+                  <strong>{{ item.item_name }}</strong><br>
+                  <small style="color: #666;">{{ item.item_category }}</small>
+                </td>
+                <td style="text-align: center; padding: 0.75rem;">{{ item.quantity }}</td>
+                <td style="text-align: right; padding: 0.75rem;">₹{{ "%.2f"|format(item.price) }}</td>
+                <td style="text-align: right; padding: 0.75rem;">₹{{ "%.2f"|format(item.price * item.quantity) }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot>
+              <tr style="border-top: 2px solid #ddd; font-weight: bold; background: #f8f9fa;">
+                <td colspan="3" style="text-align: right; padding: 1rem; color: #d32f2f;">Grand Total:</td>
+                <td style="text-align: right; padding: 1rem; color: #d32f2f; font-size: 1.1rem;">₹{{ "%.2f"|format(order.total_amount) }}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="margin-bottom: 1rem; color: #d32f2f;">Order Information</h3>
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px;">
+          {% if order.delivery_address %}
+            <div style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #dee2e6;">
+              <p style="margin-bottom: 0.5rem;"><strong>📍 Delivery Address:</strong></p>
+              <p style="color: #666;">{{ order.delivery_address }}</p>
+            </div>
+          {% endif %}
+          
+          {% if order.special_instructions %}
+            <div style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #dee2e6;">
+              <p style="margin-bottom: 0.5rem;"><strong>📝 Special Instructions:</strong></p>
+              <p style="color: #666;">{{ order.special_instructions }}</p>
+            </div>
+          {% endif %}
+          
+          {% if payment %}
+            <div style="margin-bottom: 1rem;">
+              <p style="margin-bottom: 0.5rem;"><strong>💳 Payment Method:</strong> {{ payment.method }}</p>
+              <p style="margin-bottom: 0.5rem;"><strong>Payment Status:</strong> 
+                <span style="color: {% if payment.status == 'Completed' %}#28a745{% else %}#dc3545{% endif %}; font-weight: bold;">
+                  {{ payment.status }}
+                </span>
+              </p>
+              {% if payment.transaction_id %}
+                <p style="margin-bottom: 0.5rem;"><strong>Transaction ID:</strong> 
+                  <code style="background: #e9ecef; padding: 0.25rem 0.5rem; border-radius: 3px; font-size: 0.9rem;">{{ payment.transaction_id }}</code>
+                </p>
+              {% endif %}
+              {% if payment.paid_at %}
+                <p><strong>Payment Date:</strong> {{ payment.paid_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-2" style="border-top: 1px solid #dee2e6; padding-top: 1rem;">
+      <a href="/orders" class="btn btn-secondary" style="margin-right: 1rem;">← Back to Orders</a>
+      <a href="/" class="btn">Order Again</a>
+      {% if order.order_status == 'Delivered' %}
+        <a href="/reorder/{{ order.id }}" class="btn" style="margin-left: 1rem; background: #28a745;">🔄 Reorder Items</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

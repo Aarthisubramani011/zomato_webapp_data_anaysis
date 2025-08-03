@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Payment - Foodie Express{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto;">
+  <div class="card">
+    <h2 class="text-center mb-2">Make Payment</h2>
+    <div class="mb-2" style="background: #f8f9fa; padding: 1rem; border-radius: 6px; border-left: 4px solid #d32f2f;">
+      <h3 style="margin-bottom: 1rem; color: #d32f2f;">Order Summary</h3>
+      <p><strong>Order ID:</strong> #{{ order.id }}</p>
+      <p><strong>Total Amount:</strong> ₹{{ "%.2f"|format(order.total_amount) }}</p>
+      {% if order.delivery_address %}
+        <p><strong>Delivery Address:</strong> {{ order.delivery_address }}</p>
+      {% endif %}
+      {% if order.special_instructions %}
+        <p><strong>Special Instructions:</strong> {{ order.special_instructions }}</p>
+      {% endif %}
+    </div>
+    <form method="POST">
+      <div class="form-group">
+        <label for="method">Select Payment Method *</label>
+        <select name="method" id="method" required>
+          <option value="">--Choose Payment Method--</option>
+          <option value="UPI">UPI (GPay, PhonePe, Paytm)</option>
+          <option value="Credit Card">Credit Card</option>
+          <option value="Debit Card">Debit Card</option>
+          <option value="Net Banking">Net Banking</option>
+          <option value="Cash on Delivery">Cash on Delivery</option>
+        </select>
+      </div>
+      <button type="submit" class="btn" style="width: 100%; font-size: 1.1rem;">
+        Pay ₹{{ "%.2f"|format(order.total_amount) }}
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

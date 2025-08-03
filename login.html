@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Foodie Express{% endblock %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 0 auto;">
+  <div class="card">
+    <h2 class="text-center mb-2">Login</h2>
+    <form method="POST">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" name="email" id="email" required placeholder="Enter your registered email">
+      </div>
+      <button type="submit" class="btn" style="width: 100%;">Login</button>
+    </form>
+    <div class="text-center mt-2">
+      <p>Don't have an account? <a href="/signup" style="color: #d32f2f;">Sign up here</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
